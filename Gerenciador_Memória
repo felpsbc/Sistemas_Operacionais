@@ -1,0 +1,100 @@
+MEMORIA_TOTAL = 1000  
+NUM_PARTICOES = 10    
+
+class Processo:
+    def __init__(self, id, tamanho, alocado=False):
+        self.id = id
+        self.tamanho = tamanho
+        self.alocado = alocado
+
+memoria = [0] * MEMORIA_TOTAL
+
+def inicializar_memoria():
+    global memoria
+    memoria = [0] * MEMORIA_TOTAL
+
+def exibir_memoria():
+    print(' '.join(map(str, memoria)))
+
+def alocar_particoes_fixas(processo):
+    particao_tamanho = MEMORIA_TOTAL // NUM_PARTICOES
+    for i in range(NUM_PARTICOES):
+        espaco_encontrado = True
+        for j in range(i * particao_tamanho, (i + 1) * particao_tamanho):
+            if memoria[j] != 0:
+                espaco_encontrado = False
+                break
+        if espaco_encontrado:
+            for j in range(i * particao_tamanho, (i + 1) * particao_tamanho):
+                memoria[j] = processo.id
+            print(f"Processo {processo.id} alocado na particao {i}")
+            return True
+    return False
+
+def alocar_particoes_dinamicas(processo):
+    espaco_continuo = 0
+    for i in range(MEMORIA_TOTAL):
+        if memoria[i] == 0:
+            espaco_continuo += 1
+            if espaco_continuo == processo.tamanho:
+                for j in range(i - espaco_continuo + 1, i + 1):
+                    memoria[j] = processo.id
+                print(f"Processo {processo.id} alocado dinamicamente na memoria.")
+                return True
+        else:
+            espaco_continuo = 0
+    return False
+
+def alocar_paginacao(processo, tamanho_pagina):
+    num_paginas = (processo.tamanho + tamanho_pagina - 1) // tamanho_pagina
+    paginas_alocadas = 0
+    for i in range(0, MEMORIA_TOTAL, tamanho_pagina):
+        espaco_disponivel = True
+        for j in range(i, i + tamanho_pagina):
+            if memoria[j] != 0:
+                espaco_disponivel = False
+                break
+        if espaco_disponivel:
+            for j in range(i, i + tamanho_pagina):
+                memoria[j] = processo.id
+            paginas_alocadas += 1
+            if paginas_alocadas == num_paginas:
+                print(f"Processo {processo.id} alocado com paginacao.")
+                return True
+    return False
+
+def desalocar(processo):
+    for i in range(MEMORIA_TOTAL):
+        if memoria[i] == processo.id:
+            memoria[i] = 0
+    print(f"Processo {processo.id} desalocado.")
+
+def main():
+    inicializar_memoria()
+    
+    p1 = Processo(1, 100)
+    p2 = Processo(2, 200)
+    p3 = Processo(3, 50)
+    
+    if not alocar_particoes_fixas(p1):
+        print(f"Falha ao alocar processo {p1.id} nas particoes fixas.")
+    
+    if not alocar_particoes_dinamicas(p2):
+        print(f"Falha ao alocar processo {p2.id} nas particoes dinâmicas.")
+    
+    tamanho_pagina = 10
+    if not alocar_paginacao(p3, tamanho_pagina):
+        print(f"Falha ao alocar processo {p3.id} usando paginacao.")
+
+    exibir_memoria()
+
+    desalocar(p1)
+    desalocar(p2)
+    desalocar(p3)
+    
+    exibir_memoria()
+
+if __name__ == "__main__":
+    main()
+
+# 
