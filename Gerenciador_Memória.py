@@ -72,8 +72,8 @@ def desalocar(processo):
 def main():
     inicializar_memoria()
     
-    p1 = Processo(1, 100)
-    p2 = Processo(2, 200)
+    p1 = Processo(1, 75)
+    p2 = Processo(2, 140)
     p3 = Processo(3, 50)
     
     if not alocar_particoes_fixas(p1):
@@ -97,4 +97,18 @@ def main():
 if __name__ == "__main__":
     main()
 
-# 
+# Parte 4
+# Particionamento fixo: Memória dividida em blocos de tamanho fixo.
+# Particionamento dinâmico: Memória dividida em blocos de tamanhos variáveis.
+
+# Memória é dividida em páginas (memória virtual) e quadros de páginas (memória física).
+# O processo é alocado em qualquer quadro disponível, sem precisar de contiguidade.
+# Usa uma tabela de páginas para mapear a memória virtual à memória física.
+
+# Fragmentação interna: Ocorre quando há desperdício de espaço dentro de um bloco devido ao tamanho fixo das unidades de alocação.
+# Fragmentação externa: Ocorre quando o espaço livre na memória é insuficiente para alocar novos processos, embora a soma total de memória livre seja suficiente.
+
+# Parte 5
+# 1- Ao implementar o gerenciamento de memória, os principais desafios incluem garantir uma alocação eficiente de memória, controlar a fragmentação interna e externa, e gerenciar o espaço livre de forma eficaz. Além disso, a troca de dados entre memória física e virtual pode impactar o desempenho, exigindo estratégias para otimizar o uso de memória e minimizar a latência.
+# 2- O gerenciamento de memória impacta diretamente o desempenho do sistema, pois uma alocação ineficiente pode causar lentidão devido ao uso excessivo de memória virtual ou trocas frequentes de página. Um bom gerenciamento garante melhor utilização dos recursos, permitindo que mais processos sejam executados sem sobrecarregar o sistema, melhorando a velocidade e a eficiência das aplicações.
+# 3- A fragmentação interna ocorre quando há desperdício de memória dentro de uma unidade de alocação, enquanto a fragmentação externa ocorre quando pequenos espaços livres na memória não são suficientes para novos processos. 
